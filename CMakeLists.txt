@@ -124,6 +124,9 @@ if(DISABLE_PCH)
 	set(CMAKE_DISABLE_PRECOMPILE_HEADERS ON)
 endif()
 
+# Set RPATH automatically
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH ON)
+
 # Compiler warnings for GCC/Clang
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 	add_compile_options(-Wall -Wextra -Wuninitialized)
@@ -381,8 +384,6 @@ if(APPLE)
 	set(CPACK_PACKAGE_ICON "${PROJECT_SOURCE_DIR}/src/ngscopeclient/icons/macos/ngscopeclient.icns")
 	set(CPACK_BUNDLE_NAME "ngscopeclient")
 	set(CPACK_BUNDLE_STARTUP_COMMAND "${PROJECT_SOURCE_DIR}/src/ngscopeclient/macos/ngscopeclient.sh")
-	set_target_properties(ngscopeclient PROPERTIES
-		INSTALL_RPATH "@executable_path/../lib;/usr/local/lib;/opt/homebrew/lib")
 endif()
 
 # this must be at the very end *after* we've done all the config

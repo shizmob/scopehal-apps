@@ -281,20 +281,11 @@ if(APPLE)
 	set(APPS "\${CMAKE_INSTALL_PREFIX}/bin/ngscopeclient")
 	set(DIRS "\${CMAKE_INSTALL_PREFIX}/lib")
 	set(FRAMEWORKS "\${CMAKE_INSTALL_PREFIX}/Frameworks")
-	execute_process(
-		COMMAND brew --prefix molten-vk
-		RESULT_VARIABLE MOLTEN_VK_RESULT
-		OUTPUT_VARIABLE MOLTEN_VK_OUTPUT
-		ERROR_QUIET
-		OUTPUT_STRIP_TRAILING_WHITESPACE
-	)
-	if(NOT MOLTEN_VK_RESULT EQUAL 0)
-		message(FATAL_ERROR "failed to find Homebrew prefix for molten-vk")
-	endif()
+	find_library(MOLTEN_VK_LIBRARY NAMES MoltenVK REQUIRED)
 	# https://vulkan.lunarg.com/doc/view/1.3.275.0/mac/getting_started.html#application-bundle-structure-on-macos
 	install(FILES "${CMAKE_SOURCE_DIR}/src/ngscopeclient/macos/MoltenVK_icd.json"
 		DESTINATION bin/vulkan/icd.d/)
-	install(FILES "${MOLTEN_VK_OUTPUT}/lib/libMoltenVK.dylib" DESTINATION lib)
+	install(FILES "${MOLTEN_VK_LIBRARY}" DESTINATION lib)
 	install(CODE "
 		include(BundleUtilities)
 		fixup_bundle(\"${APPS}\" \"${DIRS}/libMoltenVK.dylib\" \"${DIRS}\")
